@@ -1,51 +1,77 @@
-//simple bezier curve values + another type of easing function
+// Coding Challenge #102: 2D Water Ripple - 
+// Video: https://www.youtube.com/watch?v=BZUdGqeOD0w
+// Algorithm: https://web.archive.org/web/20160418004149/http://freespace.virgin.net/hugo.elias/graphics/x_water.htm 
+  let cols, rows,
+    current = [],
+    previous = [],
+    damping = 0.99;
 
-//start by specifying a begin and end point and two control points
-let beginY = 50, endY = 300, bez1 = 100, bez2 = 800;
-//the number of points that will be generated in any loop
-let resolution = 200; 
-let fillColor = [220,90,190];    
-//a counter to increment in the draw loop, we will use this to access individual points in the array
-let count = 0;
-//an empty array for the points we will generate in setup
-let points = [];
-//and add another array for timeValues
-let timeValues = [];
-function setup() {
-  createCanvas(400, 400);
-  
-  
-    //our for loop to generate the curve
-  for(let i = 0; i < resolution; i++){
-    //this time lets pass the normalized time value( between 0 and 1) into an easing function
-    let t = easeInOutQuad(i/resolution);
-    //and lets store those values too
-    timeValues.push(t);
-    
-    
-    
-    //for each time value we generate a y value based on the overall curve shape
-    let newPoint = bezierPoint(beginY, bez1, bez2, endY, t);
-    //push the y value to the array of values
-    points.push(newPoint);
+
+  function mouseDragged() {
+    current[mouseX][mouseY] = 55
+    // current[mouseX][mouseY+1] = 255
+    // current[mouseX][mouseY-1] = 255
+    // current[mouseX+1][mouseY] = 255
+    // current[mouseX+1][mouseY+1] = 255
+    // current[mouseX+1][mouseY-1] = 255
+    // current[mouseX-1][mouseY] = 255
+    // current[mouseX-1][mouseY+1] = 255
+    // current[mouseX-1][mouseY-1] = 255
   }
+
+  function setup() {
+    pixelDensity(1)
+    createCanvas(400, 400)
+    cols = width
+    rows = height
+    for (let i = 0; i < cols; i++) {
+      current[i] = []
+      previous[i] = []
+      for (let j = 0; j < rows; j++) {
+        current[i][j] = 0
+        previous[i][j] = 0
+      }
+    }
+    previous[200][200] = 55
+  }
+
+  function draw() {
+   // background(0);
+    loadPixels()
+    
+    for (let i = 1; i < cols - 1; i++) {
+      for (let j = 1; j < rows - 1; j++) {
+        current[i][j] =
+          (previous[i - 1][j] + previous[i + 1][j] +
+            previous[i][j - 1] + previous[i][j + 1] +
+            previous[i - 1][j - 1] + previous[i - 1][j + 1] +
+            previous[i + 1][j - 1] + previous[i + 1][j + 1]
+          ) / 4 - current[i][j];
+        current[i][j] = current[i][j] * damping
+        let index = (i + j * cols) * 4;
+        
+        let n = current[i][j];
+        
+        let r = 0.5-cos(n*57.0);
+        let g = 0.5-cos(n*1.0);
+        let b = 0.5-cos(n*23.0);
+        
+        if(i === 1 && j ==1){
+        console.log(r);
+        }
+        
+         pixels[index + 0] = r * 55;
+         pixels[index + 1] = g * 255;
+         pixels[index + 2] = b * 255;
+        pixels[index + 3] = 255;
+    
+      }
+    }
+    updatePixels()
+
+    //swap buffers
+    let temp = previous
+    previous = current
+    current = temp
   
-  
-}
-
-function draw() {
-  background(255);
-  //use the modulo symbol to keep our counter within the total length of the array
-  let y = points[count%points.length];
-  //let's use those timeValues for our x
-  let x = timeValues[count%timeValues.length] * 400;
-  fill(fillColor);
-  ellipse(x, y, 100);
-  //don't forget to increment the counter
-  count++
-}
-
-
-//the easeinout  quad function from
-// https://gist.github.com/gre/1650294
-function easeInOutQuad(t) { return t<.5 ? 2*t*t : -1+(4-2*t)*t }
+  }
