@@ -1,8 +1,3 @@
-//formula for spherical projection:
-//  x = r * sin(latitude) * cos(longitude)
-//  y = r * sin(latitude) * sin(longitude)
-//  z = r * cos(latitude)
-
 let amp;
 let myLevels = [];
 let scaling = false;

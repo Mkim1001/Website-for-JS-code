@@ -1,4 +1,4 @@
-let current = [];
+let current =[];
 let prev = [];
 let w,h;
 
@@ -6,12 +6,12 @@ let img;
 
 function preload(){
 
-  img = loadImage("IMG_1062.jpeg");
+  img = loadImage("Painting9.jpeg");
 
 }
 
 function setup() {
-  createCanvas(290, 603);
+  createCanvas(290, 600);
   pixelDensity(1);
   w = width;
   h = height;
