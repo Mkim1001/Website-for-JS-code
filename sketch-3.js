@@ -11,7 +11,7 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(290, 600);
+  createCanvas(298, 600);
   pixelDensity(1);
   w = width;
   h = height;
@@ -55,9 +55,9 @@ function draw() {
          
      let thisPix = (x + y * w) * 4;
        
-     pixels[thisPix] = pixels[thisPix] + currentVal*2;
-       pixels[thisPix+1] = pixels[thisPix+1] + currentVal*3;
-       pixels[thisPix+2] = pixels[thisPix+2] + currentVal/5;
+     pixels[thisPix] = pixels[thisPix] + currentVal*42;
+       pixels[thisPix+1] = pixels[thisPix+1] + currentVal*12;
+       pixels[thisPix+2] = pixels[thisPix+2] + currentVal/35;
     // pixels[thisPix+1] = currentVal * 255;
     // pixels[thisPix+2] = currentVal * 255;
      pixels[thisPix+3] = 255;
@@ -97,4 +97,5 @@ function draw() {
   
      return avg
 
+ 
  }
